@@ -574,6 +574,18 @@ class ForgeTest extends CIDatabaseTestCase
 
 			$this->assertEquals($fieldsData[1]->default, null);
 		}
+		elseif ($this->db->DBDriver === 'SQLSrv')
+		{
+			/// TODO: validate check
+			$this->assertEquals($fieldsData[0]->type, 'int');
+			$this->assertEquals($fieldsData[1]->type, 'varchar');
+
+			$this->assertNull($fieldsData[0]->default);
+			$this->assertNull($fieldsData[1]->default);
+
+			$this->assertEquals($fieldsData[0]->max_length, 10);
+			$this->assertEquals($fieldsData[1]->max_length, 255);
+		}
 		else
 		{
 			$this->assertTrue(false, 'DB Driver not supported');
@@ -625,7 +637,7 @@ class ForgeTest extends CIDatabaseTestCase
 			$this->assertEquals($keys['code_active']->fields, ['code', 'active']);
 			$this->assertEquals($keys['code_active']->type, 'UNIQUE');
 		}
-		elseif ($this->db->DBDriver === 'Postgre')
+		elseif ($this->db->DBDriver === 'Postgre' || $this->db->DBDriver === 'SQLSrv')
 		{
 			$this->assertEquals($keys['pk_db_forge_test_1']->name, 'pk_db_forge_test_1');
 			$this->assertEquals($keys['pk_db_forge_test_1']->fields, ['id']);

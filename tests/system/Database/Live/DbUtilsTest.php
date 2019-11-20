@@ -77,6 +77,12 @@ class DbUtilsTest extends CIDatabaseTestCase
 
 			$util->listDatabases();
 		}
+		elseif ($this->db->DBDriver === 'SQLSrv')
+		{
+			$databases = $util->listDatabases();
+
+			$this->assertTrue(in_array('test', $databases));
+		}
 	}
 
 	//--------------------------------------------------------------------
@@ -103,6 +109,12 @@ class DbUtilsTest extends CIDatabaseTestCase
 			$this->expectExceptionMessage('Unsupported feature of the database platform you are using.');
 
 			$util->databaseExists('test');
+		}
+		elseif ($this->db->DBDriver === 'SQLSrv')
+		{
+			$exist = $util->databaseExists('test');
+
+			$this->assertTrue($exist);
 		}
 	}
 
@@ -139,7 +151,7 @@ class DbUtilsTest extends CIDatabaseTestCase
 
 		$d = $util->optimizeTable('db_job');
 
-		if ($this->db->DBDriver === 'Postgre' || $this->db->DBDriver === 'SQLite3')
+		if ($this->db->DBDriver === 'Postgre' || $this->db->DBDriver === 'SQLite3' || $this->db->DBDriver === 'SQLSrv')
 		{
 			$this->assertFalse((bool)$d);
 		}
